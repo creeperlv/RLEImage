@@ -7,24 +7,24 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLEImage.Converter", "RLEImage.Converter\RLEImage.Converter.csproj", "{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}"
 EndProject
 Global
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9E75A107-9DB3-499C-8335-01F6887A9225}
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD92EE77-3C63-48C0-975F-627BF374C255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD92EE77-3C63-48C0-975F-627BF374C255}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD92EE77-3C63-48C0-975F-627BF374C255}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD92EE77-3C63-48C0-975F-627BF374C255}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD92EE77-3C63-48C0-975F-627BF374C255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD92EE77-3C63-48C0-975F-627BF374C255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD92EE77-3C63-48C0-975F-627BF374C255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD92EE77-3C63-48C0-975F-627BF374C255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E1FFDEA-608E-4383-8F40-4ECC8A330F22}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9E75A107-9DB3-499C-8335-01F6887A9225}
 	EndGlobalSection
 EndGlobal

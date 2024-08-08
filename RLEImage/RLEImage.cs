@@ -9,7 +9,7 @@ namespace RLEImage
 	{
 		public uint W;
 		public uint H;
-		public Pixel* Pixels;
+		public Pixel4* Pixels;
 		/// <summary>
 		/// Bytes Per Pixel
 		/// </summary>
@@ -18,8 +18,8 @@ namespace RLEImage
 		{
 			W = w;
 			H = h;
-			BPP = (byte)sizeof(Pixel);
-			Pixels = (Pixel*)Marshal.AllocHGlobal((int)(sizeof(Pixel) * W * H));
+			BPP = (byte)sizeof(Pixel4);
+			Pixels = (Pixel4*)Marshal.AllocHGlobal((int)(sizeof(Pixel4) * W * H));
 		}
 		public void Save(Stream s)
 		{
@@ -29,29 +29,125 @@ namespace RLEImage
 			s.WriteData(H);
 			s.WriteByte(BPP);
 			if (W * H == 0) return;
-			Pixel p = Pixels[0];
+			Pixel4 p = Pixels[0];
 			byte L = 1;
 			for (int i = 1; i < W * H; i++)
 			{
-				if (Pixels[i] != p)
+				switch (this.BPP)
 				{
-					s.WriteData(p);
-					s.WriteData(L);
-					p = Pixels[i];
-					L = 1;
-				}
-				else
-				{
-					L++;
-					if (L == byte.MaxValue)
-					{
-						s.WriteData(p);
-						s.WriteData(L);
-						L = 0;
-					}
+					case 4:
+					default:
+						{
+							if (Pixels[i] != p)
+							{
+								s.WriteData(p);
+								s.WriteData(L);
+								p = Pixels[i];
+								L = 1;
+							}
+							else
+							{
+								L++;
+								if (L == byte.MaxValue)
+								{
+									s.WriteData(p);
+									s.WriteData(L);
+									L = 0;
+								}
+							}
+						}
+						break;
+					case 3:
+						{
+							var item = (Pixel3)Pixels[i];
+							var RP= (Pixel3)p;
+							if (item != RP)
+							{
+								s.WriteData(RP);
+								s.WriteData(L);
+								p = Pixels[i];
+								L = 1;
+							}
+							else
+							{
+								L++;
+								if (L == byte.MaxValue)
+								{
+									s.WriteData(RP);
+									s.WriteData(L);
+									L = 0;
+								}
+							}
+						}
+						break;
+					case 2:
+						{
+
+							var item = (Pixel2)Pixels[i];
+							var RP= (Pixel2)p;
+							if (item != RP)
+							{
+								s.WriteData(RP);
+								s.WriteData(L);
+								p = Pixels[i];
+								L = 1;
+							}
+							else
+							{
+								L++;
+								if (L == byte.MaxValue)
+								{
+									s.WriteData(RP);
+									s.WriteData(L);
+									L = 0;
+								}
+							}
+						}
+						break;
+					case 1:
+						{
+
+							var item = (Pixel1)Pixels[i];
+							Pixel1 RP = (Pixel1)p;
+							if (item != RP)
+							{
+								s.WriteData(RP);
+								s.WriteData(L);
+								p = Pixels[i];
+								L = 1;
+							}
+							else
+							{
+								L++;
+								if (L == byte.MaxValue)
+								{
+									s.WriteData(RP);
+									s.WriteData(L);
+									L = 0;
+								}
+							}
+						}
+						break;
 				}
 			}
-			s.WriteData(p);
+			{
+				switch (this.BPP)
+				{
+					default:
+					case 4:
+						s.WriteData(p);
+						break;
+					case 3:
+						s.WriteData((Pixel3)p);
+						break;
+					case 2:
+						s.WriteData((Pixel2)p);
+						break;
+					case 1:
+						s.WriteData((Pixel1)p);
+						break;
+				}
+			}
 			s.WriteData(L);
 			s.Flush();
 		}
@@ -78,21 +174,37 @@ namespace RLEImage
 			W = s.ReadData<uint>();
 			H = s.ReadData<uint>();
 
-			var BBP = s.ReadByte();
-			if (BBP == -1)
+			var BPP = s.ReadByte();
+			if (BPP == -1)
 			{
 				img = default;
 				return false;
 			}
 			RLEImage image = new RLEImage(W, H)
 			{
-				BPP = (byte)BBP
+				BPP = (byte)BPP
 			};
 			int Pixels = 0;
 			int ToRead = (int)(W * H);
 			while (Pixels < ToRead)
 			{
-				var P = s.ReadData<Pixel>();
+				Pixel4 P;
+				switch (BPP)
+				{
+					case 4:
+					default:
+						P = s.ReadData<Pixel4>();
+						break;
+					case 3:
+						P = (Pixel4)s.ReadData<Pixel3>();
+						break;
+					case 2:
+						P = (Pixel4)s.ReadData<Pixel2>();
+						break;
+					case 1:
+						P = (Pixel4)s.ReadData<Pixel1>();
+						break;
+				}
 				var l = s.ReadByte();
 				if (l == -1)
 				{

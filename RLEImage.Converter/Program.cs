@@ -11,9 +11,16 @@ namespace RLEImage.Converter
 
 		static unsafe void Main(string[] args)
 		{
+			//{
+			//	Pixel p = new Pixel() { R = 0, G = 0xFF, B = 10, A = 0xFF };
+			//	Console.WriteLine((p).ToRGBAString());
+			//	Pixel3 p3 = p;
+			//	Console.WriteLine(((Pixel)(p3)).ToRGBAString());
+			//}
 			string? inputFile = null;
 			string? outputFile = null;
 			ConvertWay way = ConvertWay.P2R;
+			byte BPP = 4;
 			for (int i = 0; i < args.Length; i++)
 			{
 				var item = args[i];
@@ -26,6 +33,10 @@ namespace RLEImage.Converter
 					case "-o":
 						i++;
 						outputFile = args[i];
+						break;
+					case "-b":
+						i++;
+						BPP = byte.Parse(args[i]);
 						break;
 					case "-p":
 						way = ConvertWay.R2P;
@@ -48,13 +59,16 @@ namespace RLEImage.Converter
 				case ConvertWay.P2R:
 					{
 						var image = SkiaSharp.SKBitmap.Decode(inputFile);
-						using RLEImage image1 = new RLEImage((uint)image.Width, (uint)image.Height);
+						using RLEImage image1 = new RLEImage((uint)image.Width, (uint)image.Height)
+						{
+							BPP = BPP
+						};
 						for (int y = 0; y < image.Height; y++)
 						{
 							for (int x = 0; x < image.Width; x++)
 							{
 								var p = image.GetPixel(x, y);
-								Pixel _p = new()
+								Pixel4 _p = new()
 								{
 									R = p.Red,
 									G = p.Green,

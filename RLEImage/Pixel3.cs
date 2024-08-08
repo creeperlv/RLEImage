@@ -23,26 +23,24 @@ namespace RLEImage
 			Pixel3 r = default;
 			//
 			//RRRRRRGG_GGGGBBBB_BBAAAAAA
-			byte R = (byte)(p.R / 255f * 63f);
-			var temp = R << 2;
-			r.RG = (byte)(temp & 0b11111100);
+			int d = 0b00111111;
+			float v = d;
+			byte R = (byte)((p.R / 255f) * v);
+			byte G = (byte)((p.G / 255f) * v);
+			byte B = (byte)((p.B / 255f) * v);
+			byte A = (byte)((p.A / 255f) * v);
 
-			var G = (byte)(p.G / 255f * 63f);
-			temp = G >> 4;
+			var tempR0 = R << 2;
+			var tempG0 = G >> 4;
+			var tempG1 = G << 4;
+			var tempB0 = B >> 2;
+			var tempB1 = B << 6;
 
-			r.RG = (byte)(r.RG | (temp & 0b11));
-			temp = G << 4;
+			r.RG = (byte)(tempR0 | (tempG0 & 0b11));
 
-			r.GB = (byte)(temp & 0b11110000);
+			r.GB = (byte)(tempG1 | (tempB0 & 0b00001111));
 
-			byte B = (byte)(p.B / 255f * 63f);
-			temp = B >> 2;
-			r.GB = (byte)(r.GB | (temp & 0b00001111));
-			temp = B << 6;
-			r.BA = (byte)(temp & 0b11000000);
-
-			byte A = (byte)(p.A / 255f * 63f);
-			r.BA = (byte)(r.BA | (A & 0b00111111));
+			r.BA = (byte)(tempB1 | (A & 0b00111111));
 			return r;
 		}
 		public static bool operator ==(Pixel3 L, Pixel3 R)
@@ -51,7 +49,7 @@ namespace RLEImage
 		}
 		public static bool operator !=(Pixel3 L, Pixel3 R)
 		{
-			return L.RG != R.RG && L.GB != R.GB && L.BA != R.BA;
+			return L.RG != R.RG || L.GB != R.GB || L.BA != R.BA;
 		}
 
 		public override bool Equals(object? obj)
